@@ -21,12 +21,22 @@ class DatabaseManager(SQLiteDatabase):
     def connect(self):
         try:
             super().connect()
-            logger.info(f"user {self.user} connected to {self.file}")
+            logger.info(f"User {self.user} connected to {self.file}")
 
         except Exception as e:
-            logger.error(f"{self.user} failed to connect {self.file} | {e}")
+            logger.error(f"{self.user} failed to connect: {e}")
 
     def disconnect(self):
         if self.connection is not None:
             super().disconnect()
-            logger.info(f"user {self.user} disconnected to {self.file}")
+            logger.info(f"User {self.user} disconnected to {self.file}")
+
+    def execute_query(self, query: str, params: dict, fetchall: bool = False):
+        if self.connection is not None:
+            try:
+                return super().execute_query(query, params, fetchall)
+
+            except Exception as e:
+                logger.error(f"SQL Error: {e}")
+        else:
+            logger.info("Query Error: No connected database.")

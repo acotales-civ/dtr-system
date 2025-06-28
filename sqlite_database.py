@@ -53,3 +53,15 @@ class SQLiteDatabase:
 
         return None
 
+    # Context manager methods
+    def __enter__(self):
+        """Enter the context manager - establish database connection"""
+        self.connect()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Exit the context manager - clean up database connection"""
+        self.disconnect()
+        # Return None (or False) to propagate any exceptions that occured
+        return None
+
